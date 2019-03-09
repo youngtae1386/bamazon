@@ -2,14 +2,10 @@
 require('dotenv').config()
 const mysql = require('mysql');
 const keys = require("./keys.js");
-
-//const prompts = require('prompts');
-//show all data.
-
-
-
 let inquirer = require('inquirer');
 let con = mysql.createConnection(keys.AccessMysql);
+
+//const total = [];
 
 con.connect((err) => {
     if (err) throw err;
@@ -20,7 +16,7 @@ con.connect((err) => {
 connectedMySql = (con, function (err) {
     if (err) { throw err };
 
-    //created intial database//
+    //*********created intial database***********//
 
     // con.query("DROP DATABASE IF EXISTS bamazon;", function (err, result) {
     //     if (err) { throw err };
@@ -35,22 +31,23 @@ connectedMySql = (con, function (err) {
     //     con.query(");"
     // , function (err, result) {
     //     if (err) { throw err };
-    //     console.log('CREATE TABLES' + result);
-    // });
+    //     console.log('CREATE TABLES' + result); });
+
+    //*********created intial database***********//
+
+ //****Enter Here - display inventory****//
 
     displayInventory();
-    runSearch();
-
-
 
 });
+
 function displayInventory() {
     var queryAll = "SELECT * FROM bamazon.products;"
     con.query(queryAll, function (err, result) {
         if (err) { throw err };
         console.log(result);
+        runSearch();
     });
-
 };
 
 //The first should ask them the ID of the product they would like to buy.
@@ -92,24 +89,46 @@ function runSearch() {
                     con.query(updateQueryStr, function (err, data) {
                         if (err) throw err;
 
-                        console.log('Your order has been placed! Your total is $' + productData.price * quantity);
+                        let total = [];
+                        
+                            total =+(productData.price * quantity)
+                             
+                        console.log('Your order has been placed! Your total is $' + total);
+                      
+                       continueShop();
 
-                        con.end();
                     })
                 } else {
                     //console log 
                     console.log('Sorry,Insufficient quantity!', 'Available Inventory Stock:  ' + productData.stock_quantity);
-
-
+                    
                     let userQueryStr = "SELECT * FROM bamazon.products WHERE item_id = " + item + ";";
+                   
                     con.query(userQueryStr, function (err, data) {
                         if (err) throw err;
+                        if(data)
 
-                        //console.log(data);
-                        // displayInventory(); //if there isn't enough
+                        //Ask customer if they want to continue to shop
+                        continueShop();
+                                  
                     });
                 };
             };
         });
+    });
+};
+
+function continueShop() {
+    inquirer.prompt([{
+        type: "confirm",
+        name: "reply",
+        message: "Would you like to purchase another item?"
+    }]).then(function (ans) {
+        if (ans.reply) {
+            runSearch();
+        } else {
+            console.log("Thank You for shopping with us, come visit us again...");
+            con.end();
+        }
     });
 };
