@@ -31,11 +31,11 @@ Customer side - run 'node bamazonCustomer.js'
 ## bamazonManger.js
 
 
-- ![alt text](images\firstDbSelectAll.JPG)
+- ![alt text](\images\firstDbSelectAll.JPG)
 
-- ![alt text](images\InsuffiQty.JPG)
+- ![alt text](\images\InsuffiQty.JPG)
 
-- ![alt text](images\quesCustAnsw.JPG)
+- ![alt text](\images\quesCustAnsw.JPG)
 
 
 
