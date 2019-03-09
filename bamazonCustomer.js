@@ -57,7 +57,7 @@ function runSearch() {
         {
             type: 'input',
             name: 'item_id',
-            message: 'Please enter the Item_ID which you would like to purchase.',
+            message: 'Please enter the Item_ID which you would like to purchase?',
             filter: Number
         },
         {
