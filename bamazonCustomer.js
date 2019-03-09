@@ -55,7 +55,7 @@ function displayInventory() {
 
 //The first should ask them the ID of the product they would like to buy.
 function runSearch() {
-    
+
     inquirer.prompt([
         {
             type: 'input',
@@ -71,16 +71,18 @@ function runSearch() {
         }
     ]).then(function (input) {
 
-            //The second message should ask how many units of the product they would like to buy.
+        //The second message should ask how many units of the product they would like to buy.
         let item = input.item_id;
         let quantity = input.quantity;
         let queryStr = 'SELECT * FROM bamazon.products WHERE ?;';
 
         con.query(queryStr, { item_id: item }, function (err, data) {
             if (err) throw err;
-            if (data.length === 0 || data.length === 1) {
+            console.log(item);
+            console.log(data);
+            if (data === 0 || data === 1) {
                 console.log('No Data Found!');
-                displayInventory();
+                //displayInventory();
 
             } else {
                 let productData = data[0];
@@ -99,15 +101,15 @@ function runSearch() {
                     console.log('Sorry,Insufficient quantity!', 'Available Inventory Stock:  ' + productData.stock_quantity);
 
 
-                    let userQueryStr = "SELECT * FROM bamazon.products WHERE item_id = "+item+";";
+                    let userQueryStr = "SELECT * FROM bamazon.products WHERE item_id = " + item + ";";
                     con.query(userQueryStr, function (err, data) {
                         if (err) throw err;
 
-                        console.log(data);
-                       // displayInventory(); //if there isn't enough
-                    })
-                }
-            }
-        })
-    })
-}
+                        //console.log(data);
+                        // displayInventory(); //if there isn't enough
+                    });
+                };
+            };
+        });
+    });
+};
